@@ -2,23 +2,27 @@ import langchain_core.tools import tool
 import pandas as pd
 import numpy as np
 import os
+import io
 
 @tool
 def info(df : pd.DataFrame):
     ''' Gives the basic information about the given dataframe such as
     type of data , column info, size and shape of the dataframe as a pandas dataframe'''
-    return df.info()
+
+    IO = io.StringIO()
+    df.info(buf = IO)
+    return IO.getvalue()
 @tool
 def describe(df : pd.DataFrame):
     '''
-    Gives the description of numerical types of data as pandas dataframe
+    Gives the statistical description of numerical dtypes as pandas dataframe
     '''
     return df.describe()
 
 @tool
 def walkthrough_directory():
     '''
-    Gives the walkthrough to current directory
+    Gives the walkthrough of files in current directory
     '''
     return os.walk()
 
