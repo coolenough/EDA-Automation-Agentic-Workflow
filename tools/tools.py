@@ -1,4 +1,4 @@
-import langchain_core.tools import tool
+from langchain_core.tools import tool
 import pandas as pd
 import numpy as np
 import os
