@@ -3,6 +3,8 @@ import pandas as pd
 import numpy as np
 import os
 import io
+import subprocess
+import sys
 
 @tool
 def info(df : pd.DataFrame):
@@ -26,5 +28,30 @@ def walkthrough_directory():
     '''
     return os.walk()
 
+@tool 
+def install_packages(packages : list):
+    '''
+    installs required packages and returns list of installed packages as well as any packages that failed to install
+    and the exception raised that failure
+    '''
 
-tools = [info,describe,walkthrough_directory]
+    installed_packages = []
+    failed_packages = []
+
+    for package in packages:
+        try:
+            subprocess.check_call([sys.executable, "-m","pip","install",package],
+                                  timeout = 60)
+            installed_packages.append(package)
+        except subprocess.TimeoutExpired:
+            failed_packages.append({"package": package, 
+                                    "error": "Installation timed out after 60s"})
+        except Exception as e:
+            failed_packages.append({'package' : package,
+                                    "error" : str(e)})
+             
+    return installed_packages,failed_packages
+
+
+
+tools = [info,describe,walkthrough_directory,install_packages]
