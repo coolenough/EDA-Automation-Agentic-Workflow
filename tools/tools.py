@@ -5,6 +5,9 @@ import os
 import io
 import subprocess
 import sys
+import seaborn as sns
+import matplotlib.pyplot as plt
+import base64
 
 @tool
 def info(df : pd.DataFrame):
@@ -52,6 +55,49 @@ def install_packages(packages : list):
              
     return installed_packages,failed_packages
 
+@tool 
+def find_columns(df : pd.DataFrame):
+    '''
+    return columns in a Data Frame
+    '''
+    return list(df.columns)
 
+@tool 
+def box_plots(df : pd.DataFrame , columns : list):
+    '''
+    returns the box plots of the given columns 
+    '''
 
-tools = [info,describe,walkthrough_directory,install_packages]
+    images = []
+    for col in columns:
+        plt.figure()
+        sns.boxplot(df[col])
+        buffer = io.BytesIO()
+        plt.savefig(buffer,format = "png")
+        imagebytes = buffer.getvalue()
+        images.append(base64.b64encode(imagebytes).decode("utf-8"))
+        plt.close()
+        buffer.close()
+
+    return images
+
+@tool
+def kde_plots(df : pd.DataFrame , columns : list):
+    '''
+    return the kde plots of the given columns 
+    '''
+
+    images = []
+    for col in columns:
+        plt.figure()
+        sns.kdeplot(df[col] , fill = True , color="purple")
+        buffer = io.BytesIO()
+        plt.savefig(buffer,format = "png")
+        imagebytes = buffer.getvalue()
+        images.append(base64.b64encode(imagebytes).decode("utf-8"))
+        plt.close()
+        buffer.close()
+
+    return images
+
+tools = [info,describe,walkthrough_directory,install_packages,box_plots,kde_plots]
