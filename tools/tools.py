@@ -100,4 +100,11 @@ def kde_plots(df : pd.DataFrame , columns : list):
 
     return images
 
+@tool
+def find_unique_values(df : pd.DataFrame , target : str):
+    '''
+    returns the unique classes in target
+    '''
+    return np.unique(df[target])
+
 tools = [info,describe,walkthrough_directory,install_packages,box_plots,kde_plots]

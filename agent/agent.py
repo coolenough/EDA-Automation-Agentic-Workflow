@@ -8,6 +8,7 @@ from langchain_core.messages import SystemMessage,AnyMessage,BaseMessage
 from tools import tools
 import dotenv
 import os
+from agent.prompts import SYSTEM_PROMPT
 
 dotenv.load_dotenv()
 
@@ -23,4 +24,10 @@ model = ChatOpenAI(
 
 graph = StateGraph(AgentState)
 
+def AgentCall(state : AgentState) -> AgentState:
+    state["message"] = model.invoke(f" {SYSTEM_PROMPT} , {state['message']} ").content
+    return state
+
+
+graph.add_node(AgentCall , "Model")
     
