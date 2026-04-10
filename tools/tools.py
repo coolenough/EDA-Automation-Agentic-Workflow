@@ -107,4 +107,45 @@ def find_unique_values(df : pd.DataFrame , target : str):
     '''
     return np.unique(df[target])
 
-tools = [info,describe,walkthrough_directory,install_packages,box_plots,kde_plots]
+@tool 
+def type_of_categotical_data(df : pd.DataFrame , columns : list):
+    '''
+    returns the column and its and the type of categorical data
+    '''
+
+    col_types = []
+
+    for col in columns:
+        num = len(np.unique(df[col]))
+        if num > 2:
+            col_types.append({"column" : col , "type" : "Multi Cardinal"})
+        else:
+            col_types.append({"column" : col , "type" : "Binary" })
+
+    return col_types
+
+@tool 
+def piecharts(df : pd.DataFrame , columns : list):
+    '''
+    Generates pie charts for categorical columns.
+    '''
+    images = []
+    for col in columns:
+        # You need the value_counts() to make a pie chart!
+        data = df[col].value_counts()
+        
+        plt.figure(figsize=(6, 6))
+        plt.pie(data, labels=data.index, autopct='%1.1f%%')
+        plt.title(f"Distribution of {col}")
+        
+        buffer = io.BytesIO()
+        plt.savefig(buffer, format="png")
+        plt.close()
+        
+        images.append(base64.b64encode(buffer.getvalue()).decode("utf-8"))
+        buffer.close()
+
+    return images
+
+
+tools = [info,describe,walkthrough_directory,install_packages,box_plots,kde_plots,find_unique_values,type_of_categotical_data,piecharts]
