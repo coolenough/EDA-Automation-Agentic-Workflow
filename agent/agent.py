@@ -22,12 +22,24 @@ model = ChatOpenAI(
     api_key = os.getenv("model_api_key","")
 )
 
+model = model.bind_tools(tools=tools)
+
 graph = StateGraph(AgentState)
 
 def AgentCall(state : AgentState) -> AgentState:
     state["message"] = model.invoke(f" {SYSTEM_PROMPT} , {state['message']} ").content
     return state
 
+def passon(state : AgentState) -> AgentState:
+    return state
 
+
+# passon -> AgentCall -> tools -> output
+
+graph.add_node(passon , passon)
 graph.add_node(AgentCall , "Model")
+
+graph.add_edge(START , "passon")
+graph.add_node("passon","Model")
+graph.add_edge("Model" , END)
     

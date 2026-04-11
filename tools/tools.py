@@ -148,4 +148,5 @@ def piecharts(df : pd.DataFrame , columns : list):
     return images
 
 
+
 tools = [info,describe,walkthrough_directory,install_packages,box_plots,kde_plots,find_unique_values,type_of_categotical_data,piecharts]
