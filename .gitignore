@@ -2,6 +2,7 @@
 .env
 *.env
 .env.local
+*.ipynb
 
 # Operating System Files
 .DS_Store
