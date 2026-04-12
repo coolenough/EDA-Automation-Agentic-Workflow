@@ -5,10 +5,11 @@ import langchain
 import langgraph
 from typing import TypedDict,Annotated
 from langchain_core.messages import SystemMessage,AnyMessage,BaseMessage
-from tools import tools
+from tools.tools import agent_tools
 import dotenv
 import os
 from agent.prompts import SYSTEM_PROMPT
+from IPython.display import display , Image
 
 dotenv.load_dotenv()
 
@@ -22,7 +23,7 @@ model = ChatOpenAI(
     api_key = os.getenv("model_api_key","")
 )
 
-model = model.bind_tools(tools=tools)
+model = model.bind_tools(tools = agent_tools)
 
 graph = StateGraph(AgentState)
 
@@ -36,10 +37,18 @@ def passon(state : AgentState) -> AgentState:
 
 # passon -> AgentCall -> tools -> output
 
-graph.add_node(passon , passon)
-graph.add_node(AgentCall , "Model")
+graph.add_node("passon" , passon)
+graph.add_node("Model" , AgentCall)
 
-graph.add_edge(START , "passon")
-graph.add_node("passon","Model")
+graph.set_entry_point("passon")
+graph.add_edge("passon","Model")
 graph.add_edge("Model" , END)
+
+app = graph.compile()
+
+if __name__ == "__main__":
+    x = app.get_graph().draw_mermaid_png()
+    
+    with open("architecture.png" , "wb") as f:
+        f.write(x)
     

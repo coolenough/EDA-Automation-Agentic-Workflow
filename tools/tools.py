@@ -10,19 +10,24 @@ import matplotlib.pyplot as plt
 import base64
 
 @tool
-def info(df : pd.DataFrame):
+def info(filename : str):
     ''' Gives the basic information about the given dataframe such as
     type of data , column info, size and shape of the dataframe as a pandas dataframe'''
+
+    df = pd.read_csv(filename)
 
     IO = io.StringIO()
     df.info(buf = IO)
     return IO.getvalue()
 @tool
-def describe(df : pd.DataFrame):
+def describe(filename : str):
     '''
     Gives the statistical description of numerical dtypes as pandas dataframe
     '''
-    return df.describe()
+
+    df = pd.read_csv(filename)
+
+    return df.describe().to_dict()
 
 @tool
 def walkthrough_directory():
@@ -56,18 +61,22 @@ def install_packages(packages : list):
     return installed_packages,failed_packages
 
 @tool 
-def find_columns(df : pd.DataFrame):
+def find_columns(filename : str):
     '''
     return columns in a Data Frame
     '''
+
+    df = pd.read_csv(filename)
+
     return list(df.columns)
 
 @tool 
-def box_plots(df : pd.DataFrame , columns : list):
+def box_plots(filename : str, columns : list):
     '''
     returns the box plots of the given columns 
     '''
 
+    df = pd.read_csv(filename)
     images = []
     for col in columns:
         plt.figure()
@@ -82,10 +91,12 @@ def box_plots(df : pd.DataFrame , columns : list):
     return images
 
 @tool
-def kde_plots(df : pd.DataFrame , columns : list):
+def kde_plots(filename : str , columns : list):
     '''
     return the kde plots of the given columns 
     '''
+
+    df = pd.read_csv(filename)
 
     images = []
     for col in columns:
@@ -101,18 +112,21 @@ def kde_plots(df : pd.DataFrame , columns : list):
     return images
 
 @tool
-def find_unique_values(df : pd.DataFrame , target : str):
+def find_unique_values(filename : str , target : str):
     '''
     returns the unique classes in target
     '''
+    
+    df = pd.read_csv(filename)
     return np.unique(df[target])
 
 @tool 
-def type_of_categotical_data(df : pd.DataFrame , columns : list):
+def type_of_categotical_data(filename : str , columns : list):
     '''
     returns the column and its and the type of categorical data
     '''
 
+    df = pd.read_csv(filename)
     col_types = []
 
     for col in columns:
@@ -125,10 +139,12 @@ def type_of_categotical_data(df : pd.DataFrame , columns : list):
     return col_types
 
 @tool 
-def piecharts(df : pd.DataFrame , columns : list):
+def piecharts(filename : str , columns : list):
     '''
     Generates pie charts for categorical columns.
     '''
+
+    df = pd.read_csv(filename)
     images = []
     for col in columns:
         # You need the value_counts() to make a pie chart!
@@ -149,4 +165,4 @@ def piecharts(df : pd.DataFrame , columns : list):
 
 
 
-tools = [info,describe,walkthrough_directory,install_packages,box_plots,kde_plots,find_unique_values,type_of_categotical_data,piecharts]
+agent_tools = [info,describe,walkthrough_directory,install_packages,box_plots,kde_plots,find_unique_values,type_of_categotical_data,piecharts]
