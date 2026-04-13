@@ -163,6 +163,25 @@ def piecharts(filename : str , columns : list):
 
     return images
 
+@tool
+def findnullvalues(filename : str , columns : list):
+
+    '''
+    Returns whether the particular columns in the file contains some null values
+    '''
+
+    df = pd.read_csv(filename)
+
+    results = []
+
+    for col in columns:
+        if df[col].isna().any():
+            results.append({"column" : col , "containsnullvalues" : True})
+        else:
+            results.append({"column" : col , "containsnullvalues" : False})
+
+    return results
+
 
 
 agent_tools = [info,describe,walkthrough_directory,install_packages,box_plots,kde_plots,find_unique_values,type_of_categotical_data,piecharts]
