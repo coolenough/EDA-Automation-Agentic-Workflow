@@ -182,6 +182,20 @@ def findnullvalues(filename : str , columns : list):
 
     return results
 
+@tool
+def findnoofnullvalues(filename : str , columns : list):
+    '''
+    Returns no of null values in a particular column
+    '''
+
+    df = pd.read_csv(filename)
+
+    results = []
+
+    for col in columns:
+        results.append({"column" : col , "noofnullvalues" : np.sum(df[col].isna().astype(int))}) 
+
+    return results
 
 
-agent_tools = [info,describe,walkthrough_directory,install_packages,box_plots,kde_plots,find_unique_values,type_of_categotical_data,piecharts,findnullvalues]
+agent_tools = [info,describe,walkthrough_directory,install_packages,box_plots,kde_plots,find_unique_values,type_of_categotical_data,piecharts,findnullvalues,findnoofnullvalues]
