@@ -33,7 +33,7 @@ def passon(state : AgentState) -> AgentState:
     return state
 
 def to_continue(state : AgentState) ->str:
-  message = state["messages"]
+  message = state["message"]
   last_message = message[-1]
   if not last_message.tool_calls:
     return "end"
