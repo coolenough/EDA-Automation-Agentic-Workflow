@@ -197,5 +197,17 @@ def findnoofnullvalues(filename : str , columns : list):
 
     return results
 
+@tool
+def getFileName():
+    '''
+    Gets the filename and the relative path to directory where the file to examine exists
+    '''
 
-agent_tools = [info,describe,walkthrough_directory,install_packages,box_plots,kde_plots,find_unique_values,type_of_categotical_data,piecharts,findnullvalues,findnoofnullvalues]
+    filename = input("Enter file name : ")
+
+    rel_path = input("Enter relative path : ")
+
+    return {"filename" : filename , "relative_path" : rel_path}
+
+
+agent_tools = [info,describe,walkthrough_directory,install_packages,box_plots,kde_plots,find_unique_values,type_of_categotical_data,piecharts,findnullvalues,findnoofnullvalues,getFileName]

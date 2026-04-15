@@ -9,7 +9,6 @@ from tools.tools import agent_tools
 import dotenv
 import os
 from agent.prompts import SYSTEM_PROMPT
-from IPython.display import display , Image
 
 dotenv.load_dotenv()
 
