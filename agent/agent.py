@@ -26,8 +26,8 @@ model = model.bind_tools(tools = agent_tools)
 graph = StateGraph(AgentState)
 
 def AgentCall(state : AgentState) -> AgentState:
-    state["message"] = model.invoke(f" {SYSTEM_PROMPT} , {state['message']} ").content
-    return state
+    responce = model.invoke([SystemMessage(SYSTEM_PROMPT)] + state["message"])
+    return AgentState(message = responce)
 
 def passon(state : AgentState) -> AgentState:
     return state
@@ -41,7 +41,6 @@ def to_continue(state : AgentState) ->str:
     return "continue"
 
 
-# passon -> AgentCall -> tools -> output
 
 tools_node = ToolNode(tools = agent_tools)
 
