@@ -1,9 +1,8 @@
 from langgraph.graph import StateGraph,END,START
 from langgraph.graph.message import add_messages
 from langchain_openai import ChatOpenAI
-import langchain
-import langgraph
 from typing import TypedDict,Annotated
+from langgraph.prebuilt import ToolNode
 from langchain_core.messages import SystemMessage,AnyMessage,BaseMessage
 from tools.tools import agent_tools
 import dotenv
@@ -33,15 +32,31 @@ def AgentCall(state : AgentState) -> AgentState:
 def passon(state : AgentState) -> AgentState:
     return state
 
+def to_continue(state : AgentState) ->str:
+  message = state["messages"]
+  last_message = message[-1]
+  if not last_message.tool_calls:
+    return "end"
+  else:
+    return "continue"
+
 
 # passon -> AgentCall -> tools -> output
 
+tools_node = ToolNode(tools = agent_tools)
+
 graph.add_node("passon" , passon)
 graph.add_node("Model" , AgentCall)
+graph.add_node("tools" , tools_node)
 
 graph.set_entry_point("passon")
 graph.add_edge("passon","Model")
-graph.add_edge("Model" , END)
+graph.add_conditional_edges("Model" , to_continue , {
+   "end" : END,
+   "continue" : "tools"
+})
+
+graph.add_edge("tools" , "Model")
 
 app = graph.compile()
 
