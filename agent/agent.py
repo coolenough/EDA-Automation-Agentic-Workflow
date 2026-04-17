@@ -29,8 +29,6 @@ def AgentCall(state : AgentState) -> AgentState:
     responce = model.invoke([SystemMessage(SYSTEM_PROMPT)] + state["message"])
     return AgentState(message = responce)
 
-def passon(state : AgentState) -> AgentState:
-    return state
 
 def to_continue(state : AgentState) ->str:
   message = state["message"]
@@ -44,12 +42,11 @@ def to_continue(state : AgentState) ->str:
 
 tools_node = ToolNode(tools = agent_tools)
 
-graph.add_node("passon" , passon)
+
 graph.add_node("Model" , AgentCall)
 graph.add_node("tools" , tools_node)
 
-graph.set_entry_point("passon")
-graph.add_edge("passon","Model")
+graph.set_entry_point("Model")
 graph.add_conditional_edges("Model" , to_continue , {
    "end" : END,
    "continue" : "tools"
