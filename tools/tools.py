@@ -8,7 +8,10 @@ import sys
 import seaborn as sns
 import matplotlib.pyplot as plt
 import base64
-import cpptools
+from tools import cpptools
+import pybind11
+
+
 
 @tool
 def info(filename : str):
