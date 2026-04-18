@@ -8,6 +8,7 @@ import sys
 import seaborn as sns
 import matplotlib.pyplot as plt
 import base64
+import cpptools
 
 @tool
 def info(filename : str):
