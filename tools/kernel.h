@@ -10,6 +10,10 @@ namespace py = pybind11;
 template<typename Func ,typename DataType>
 void parrallel_processing(Func tool , DataType data , size_t size)
 {
+    // ensure that you create new threads only when you have proper data 
+    // or else you might end up doing the same work repetedly on all of your CORES;
+    if(size == 0) return;
+    
     //unlocking gil to make sure that we can use multi threading;
     //uses RAII -- > resource aquisitaion as initiliaztion
     py::gil_scoped_release release;
