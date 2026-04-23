@@ -8,8 +8,14 @@ from tools.tools import agent_tools
 import dotenv
 import os
 from agent.prompts import SYSTEM_PROMPT
+import logging
 
-dotenv.load_dotenv()
+logging.basicConfig(level = logging.INFO)
+logger = logging.getLogger("Agent")
+
+if not dotenv.load_dotenv(dotenv_path= ".env"):
+   logger.exception("ENV NOT CORRECTLY CONFIGURED")
+   
 
 class AgentState(TypedDict):
     messages : Annotated[BaseMessage, add_messages]
