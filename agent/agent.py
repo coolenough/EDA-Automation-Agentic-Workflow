@@ -12,7 +12,7 @@ from agent.prompts import SYSTEM_PROMPT
 dotenv.load_dotenv()
 
 class AgentState(TypedDict):
-    message : Annotated[BaseMessage, add_messages]
+    messages : Annotated[BaseMessage, add_messages]
     directory : str
 
 model = ChatOpenAI(
@@ -26,12 +26,12 @@ model = model.bind_tools(tools = agent_tools)
 graph = StateGraph(AgentState)
 
 def AgentCall(state : AgentState) -> AgentState:
-    responce = model.invoke([SystemMessage(SYSTEM_PROMPT)] + state["message"])
-    return AgentState(message = responce)
+    responce = model.invoke([SystemMessage(SYSTEM_PROMPT)] + state["messages"])
+    return AgentState(messages = responce)
 
 
 def to_continue(state : AgentState) ->str:
-  message = state["message"]
+  message = state["messages"]
   last_message = message[-1]
   if not last_message.tool_calls:
     return "end"

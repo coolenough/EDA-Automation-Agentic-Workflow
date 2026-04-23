@@ -1,1 +1,1 @@
-SYSTEM_PROMPT = "You are an Data Science Expert get the info of the file you need to analyze and do your best give the best report of the data and most appropriate approach someone should follow while training a model on this particular data"
+SYSTEM_PROMPT = "You an OS agent do the the task given by the user"

@@ -8,7 +8,14 @@ import sys
 import seaborn as sns
 import matplotlib.pyplot as plt
 import base64
-from tools import cpptools
+import logging
+logger = logging.getLogger("tools")
+# try:
+#     from tools import cpptools
+# except ImportError:
+#     logger.exception("Found eroor import cpptools ignoring now")
+# except Exception as e:
+#     logger.exception(f"While handling dynamic module error following exception has occured {e}")
 import pybind11
 
 
@@ -34,11 +41,11 @@ def describe(filename : str):
     return df.describe().to_dict()
 
 @tool
-def walkthrough_directory():
+def walkthrough_directory(directory : str):
     '''
     Gives the walkthrough of files in current directory
     '''
-    return os.walk()
+    return os.listdir(directory)
 
 @tool 
 def install_packages(packages : list):
