@@ -4,6 +4,7 @@ from langchain_openai import ChatOpenAI
 from typing import TypedDict,Annotated
 from langgraph.prebuilt import ToolNode
 from langchain_core.messages import SystemMessage,AnyMessage,BaseMessage
+from langgraph.checkpoint.memory import MemorySaver
 from tools.tools import agent_tools
 import dotenv
 import os
@@ -60,7 +61,9 @@ graph.add_conditional_edges("Model" , to_continue , {
 
 graph.add_edge("tools" , "Model")
 
-app = graph.compile()
+checkpointer = MemorySaver()
+
+app = graph.compile(checkpointer = checkpointer)
 
 if __name__ == "__main__":
     x = app.get_graph().draw_mermaid_png()

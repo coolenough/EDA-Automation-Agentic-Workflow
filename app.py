@@ -20,9 +20,6 @@ def fetch_data():
             time.sleep(1)
             print("\n[bold red] DID NOT FIND PREVIOUS MESSAGES[/bold red]")
         # Simulate a task taking 3 seconds
-        
-        
-    
 
 if __name__ == "__main__":
     fetch_data()
