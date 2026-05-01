@@ -3,6 +3,9 @@
 *.env
 .env.local
 *.ipynb
+*.csv
+*.png
+
 
 # Operating System Files
 .DS_Store
@@ -15,6 +18,8 @@ venv/
 .venv/
 .vscode
 .vscode/
+
+
 
 # Build folders
 dist/

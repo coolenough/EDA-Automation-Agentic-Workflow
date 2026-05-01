@@ -229,16 +229,24 @@ def plot_correlation_heatmap(filename : str , columns : list):
     df = pd.read_csv(filename)
 
     plt.figure(figsize=(10, 8))
+
+    corrmatrix = df[columns].corr()
+
     sns.heatmap(df[columns].corr(), annot=True, cmap='coolwarm', linewidths=0.5)
     
     buffer = io.BytesIO()
-    plt.savefig(buffer, format="png")
+    plt.savefig(f"{filename}_correlation_heatmap.png")
     plt.close()
     
     image = base64.b64encode(buffer.getvalue()).decode("utf-8")
     buffer.close()
 
-    return image
+    return {
+        "Correlation_Matrix" : corrmatrix.to_dict(),
+        "Saved Image Path" : f"{filename}_correlation_heatmap.png",
+        "Status" : "Success"
+
+    }
 
 
 agent_tools = [info,describe,walkthrough_directory,install_packages,box_plots,kde_plots,find_unique_values,type_of_categotical_data,piecharts,findnullvalues,findnoofnullvalues,getFileName,plot_correlation_heatmap]
